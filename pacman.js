@@ -6,7 +6,7 @@ var lives = 2;
 // Define your ghosts here
 
 // replace this comment with your four ghosts setup as objects
-function ghosts(){
+function getInky(){
       var inky = {
       menu_option: '1',
       name: 'Inky',
@@ -15,6 +15,10 @@ function ghosts(){
       edible: false
     };
 
+    return inky;
+  }
+
+function getBlinky(){
       var blinky = {
       menu_option: '2',
       name: 'Blinky',
@@ -23,7 +27,11 @@ function ghosts(){
       edible: false
     };
 
-      var inky = {
+    return blinky;
+  }
+
+function getPinky(){
+      var pinky = {
       menu_option: '3',
       name: 'Pinky',
       colour: 'Pink',
@@ -31,13 +39,24 @@ function ghosts(){
       edible: false
     };
 
-      var inky = {
+    return pinky;
+  }
+
+function getClyde(){
+      var clyde = {
       menu_option: '4',
       name: 'Clyde',
       colour: 'Orange',
       character: 'Pokey',
       edible: false
-      };
+    };
+
+      return clyde;
+}
+
+function ghostsArray(){
+  var ghosts = [getInky(),getClyde(),getBlinky(),getPinky()];
+  return ghosts;
 }
 
 
