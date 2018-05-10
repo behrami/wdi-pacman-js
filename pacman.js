@@ -1,13 +1,14 @@
 // Setup initial game stats
 var score = 0;
 var lives = 2;
-
+var ghosts = [getInky(),getBlinky(),getPinky(),getClyde()];
+var powerPellets = 4;
 
 // Define your ghosts here
 
 // replace this comment with your four ghosts setup as objects
 function getInky(){
-      var inky = {
+    var inky = {
       menu_option: '1',
       name: 'Inky',
       colour: 'Red',
@@ -19,7 +20,7 @@ function getInky(){
   }
 
 function getBlinky(){
-      var blinky = {
+    var blinky = {
       menu_option: '2',
       name: 'Blinky',
       colour: 'Cyan',
@@ -31,7 +32,7 @@ function getBlinky(){
   }
 
 function getPinky(){
-      var pinky = {
+    var pinky = {
       menu_option: '3',
       name: 'Pinky',
       colour: 'Pink',
@@ -43,7 +44,7 @@ function getPinky(){
   }
 
 function getClyde(){
-      var clyde = {
+    var clyde = {
       menu_option: '4',
       name: 'Clyde',
       colour: 'Orange',
@@ -54,17 +55,13 @@ function getClyde(){
       return clyde;
 }
 
-function ghostsArray(){
-  var ghosts = [getInky(),getClyde(),getBlinky(),getPinky()];
-  return ghosts;
-}
-
 
 // Draw the screen functionality
 function drawScreen() {
   clearScreen();
   setTimeout(function() {
     displayStats();
+    gameOver();
     displayMenu();
     displayPrompt();
   }, 10);
@@ -76,11 +73,21 @@ function clearScreen() {
 
 function displayStats() {
   console.log('Score: ' + score + '     Lives: ' + lives);
+  console.log('\n     Power-Pellets:'+ powerPellets);
 }
 
 function displayMenu() {
   console.log('\n\nSelect Option:\n');  // each \n creates a new line
   console.log('(d) Eat Dot');
+
+  if(powerPellets  > 0){
+    console.log('(p) Eat Power-Pellet');
+  }
+
+  for(i = 0; i < ghosts.length; i++){
+      console.log('(' + ghosts[i].menu_option +') Eat '+ ghosts[i].name+'('+ ghosts[i].edible +')');
+  }
+
   console.log('(q) Quit');
 }
 
@@ -96,6 +103,43 @@ function eatDot() {
   score += 10;
 }
 
+function eatPowerPellet(){
+
+  score += 50;
+  powerPellets -=1;
+
+  for(i=0; i<ghosts.length; i++){
+    ghosts[i].edible = true; //HOW TO ASSIGN EDIBLE TO TRUE
+  }
+
+}
+
+function eatGhost(menu_option){
+
+  for(i=0; i<ghosts.length; i++){
+    if(menu_option === ghosts[i].menu_option){
+
+      if(ghosts[i].edible === false){
+        lives -=1;
+        console.log('\nColor of '+ghosts[i].name+' ghost is '+ ghosts[i].colour);
+      }
+      else{
+        console.log('\nColor of '+ghosts[i].name+' ghost is '+ ghosts[i].colour+ 'and the personality is ' + ghosts[i].character);
+        score +=200;
+        for(j=0; j<ghosts.length; j++){
+          ghosts[j].edible = false;
+        }
+      }
+
+    }
+  }
+}
+
+function gameOver(){
+  if (lives ==0){
+    process.exit();
+  }
+}
 
 // Process Player's Input
 function processInput(key) {
@@ -106,6 +150,26 @@ function processInput(key) {
       break;
     case 'd':
       eatDot();
+      break;
+    case 'p':
+        if(powerPellets>0){
+            eatPowerPellet();
+            break;
+        }
+        else{
+          console.log('\nNot enough Pelets');
+        }
+    case '1':
+      eatGhost('1');
+      break;
+    case '2':
+      eatGhost('2');
+      break;
+    case '3':
+      eatGhost('3');
+      break;
+    case '4':
+      eatGhost('4');
       break;
     default:
       console.log('\nInvalid Command!');
